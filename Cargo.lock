@@ -2,12 +2,12 @@
 name = "CGoL"
 version = "0.1.0"
 dependencies = [
- "rustty 0.1.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustty 0.1.9 (git+https://github.com/cpjreynolds/rustty.git)",
 ]
 
 [[package]]
 name = "bitflags"
-version = "0.1.1"
+version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
@@ -31,20 +31,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "nix"
-version = "0.3.9"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "bitflags 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bitflags 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.1.10 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "rustty"
-version = "0.1.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.1.9"
+source = "git+https://github.com/cpjreynolds/rustty.git#fc6feb103163fe319cdde6f61351196d4d911093"
 dependencies = [
  "lazy_static 0.1.15 (registry+https://github.com/rust-lang/crates.io-index)",
- "nix 0.3.9 (registry+https://github.com/rust-lang/crates.io-index)",
+ "libc 0.1.10 (registry+https://github.com/rust-lang/crates.io-index)",
+ "nix 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "term 0.2.12 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
