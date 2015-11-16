@@ -18,6 +18,7 @@ fn main() {
     let mut term = rustty::Terminal::new().unwrap();
     let ruleset = Ruleset::new(ruleset::DEFAULT);
     let mut game = Game::new(term, &ruleset);
+
     game.run();
 }
 

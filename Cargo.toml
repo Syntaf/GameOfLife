@@ -4,4 +4,4 @@ version = "0.1.0"
 authors = ["Syntaf <gmercer015@gmail.com>"]
 
 [dependencies]
-rustty = { git = "https://github.com/cpjreynolds/rustty.git" }
+rustty = { git = "https://github.com/Syntaf/rustty.git" }

@@ -5,36 +5,47 @@ use ruleset::Ruleset;
 use self::rustty::{
     Terminal,
     Event,
-    HasSize,
-    CellAccessor
+    HasSize
+};
+
+use self::rustty::ui::core::{
+    Widget,
+    HorizontalAlign,
+    VerticalAlign,
+    ButtonResult,
 };
 
 use self::rustty::ui::{
-    Painter,
     Dialog,
-    DialogResult,
-    Alignable,
-    HorizontalAlign,
-    VerticalAlign,
-    Widget
+    Canvas,
+    Label,
+    StdButton
 };
 
 pub struct Game<'a> {
     term: Terminal,
     ruleset: &'a Ruleset,
     ui: Dialog,
-    canvas: Widget
+    canvas: Canvas
 }
 
 impl<'a> Game<'a> {
     pub fn new(t_term: Terminal, t_ruleset: &'a Ruleset) -> Game {
-        let mut ui_dlg = Dialog::new(t_term.cols(), 10);
-        let mut canvas = Widget::new(t_term.cols(), t_term.rows() - 10);
-        ui_dlg.window_mut().align(&t_term, HorizontalAlign::Left, VerticalAlign::Bottom, 0);
-        ui_dlg.window_mut().draw_box();
-        canvas.align(&t_term, HorizontalAlign::Left, VerticalAlign::Top, 0);
-        canvas.draw_box();
-        Game { term: t_term, ruleset: t_ruleset, ui: ui_dlg, canvas: canvas }
+        let (t_width, t_height) = t_term.size();
+
+        let mut dlg = Dialog::new(t_width, t_height/5);
+        dlg.draw_box();
+
+        let mut title = Label::from_str("Welcome to the console based game of life!");
+        title.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (1,1));
+        dlg.add_label(title);
+        dlg.pack(&t_term, HorizontalAlign::Middle, VerticalAlign::Bottom, (0,0));
+
+        let mut canvas_ = Canvas::new(t_width - 1, t_height - t_height/5 - 1);
+        canvas_.draw_box();
+        canvas_.pack(&t_term, HorizontalAlign::Middle, VerticalAlign::Top, (0,1));
+
+        Game { term: t_term, ruleset: t_ruleset, ui: dlg, canvas: canvas_ }
     }
 
     pub fn run(&mut self) {
@@ -46,8 +57,8 @@ impl<'a> Game<'a> {
                 }
             }
 
-            self.ui.window().draw_into(&mut self.term);
-            self.canvas.draw_into(&mut self.term);
+            self.ui.draw(&mut self.term);
+            self.canvas.draw(&mut self.term);
             self.term.swap_buffers().unwrap();
         }
     }
