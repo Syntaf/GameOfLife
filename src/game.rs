@@ -22,18 +22,19 @@ use self::rustty::ui::{
     StdButton
 };
 
-pub struct Game<'a> {
+pub struct Game {
     term: Terminal,
-    ruleset: &'a Ruleset,
+    ruleset: Ruleset,
     ui: Dialog,
     canvas: Canvas
 }
 
-impl<'a> Game<'a> {
-    pub fn new(t_term: Terminal, t_ruleset: &'a Ruleset) -> Game {
+impl Game {
+    pub fn new(t_term: Terminal, t_ruleset: Ruleset) -> Game {
         let (t_width, t_height) = t_term.size();
 
-        if(t_width < 50 || t_height < 30) {
+        // Do not start game is the terminal is not large enough for UI
+        if t_width < 50 || t_height < 30 {
             let msg = format!("Terminal must be larger than 50 columns and \
             30 rows. {}x{} detected", t_width, t_height);
             panic!(msg);
@@ -62,15 +63,15 @@ impl<'a> Game<'a> {
         title.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (1,1));
         dlg.add_label(title);
         
-        let mut play = StdButton::new("Play", 'p', ButtonResult::Custom(2));
+        let mut play = StdButton::new("Play", 'p', ButtonResult::Custom(1));
         play.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Bottom, (2,5));
         dlg.add_button(play);
 
-        let mut stop = StdButton::new("Stop", 's', ButtonResult::Custom(3));
+        let mut stop = StdButton::new("Stop", 's', ButtonResult::Custom(2));
         stop.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Bottom, (2,4));
         dlg.add_button(stop);
         
-        let mut settings = StdButton::new("Settings", 's', ButtonResult::Custom(1));
+        let mut settings = StdButton::new("Settings", 's', ButtonResult::Custom(3));
         settings.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Bottom, (2,3));
         dlg.add_button(settings);
 
@@ -79,23 +80,39 @@ impl<'a> Game<'a> {
         dlg.add_button(quit);
 
         let mut help = StdButton::new("Help", 'h', ButtonResult::Custom(4));
-        help.pack(&dlg, HorizontalAlign::Middle, VerticalAlign::Bottom, (0, 5));
+        help.pack(&dlg, HorizontalAlign::Right, VerticalAlign::Bottom, (2, 5));
         dlg.add_button(help);
 
         let mut about = StdButton::new("About", 'a', ButtonResult::Custom(5));
-        about.pack(&dlg, HorizontalAlign::Middle, VerticalAlign::Bottom, (0, 4));
+        about.pack(&dlg, HorizontalAlign::Right, VerticalAlign::Bottom, (2, 4));
         dlg.add_button(about);
 
         dlg
     }
 
     pub fn run(&mut self) {
+        let mut play = false;
         'main: loop {
             while let Some(Event::Key(ch)) = self.term.get_event(0).unwrap() {
                 match self.ui.result_for_key(ch) {
                     Some(ButtonResult::Ok) => break 'main,
+                    Some(ButtonResult::Custom(i)) => {
+                        match i {
+                            1   => {play = true},
+                            2   => {play = false},
+                            3   => { /* settings */ },
+                            4   => { /* help */ },
+                            5   => { /* about */ },
+                            _   => {}
+                        }
+                    }
                      _  => {},
                 }
+            }
+
+            // if the game is to be played
+            if play {
+
             }
 
             self.ui.draw(&mut self.term);
