@@ -2,6 +2,7 @@
 name = "CGoL"
 version = "0.1.0"
 dependencies = [
+ "rand 0.3.12 (registry+https://github.com/rust-lang/crates.io-index)",
  "rustty 0.1.9 (git+https://github.com/Syntaf/rustty.git)",
 ]
 

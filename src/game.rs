@@ -1,11 +1,14 @@
 extern crate rustty; 
+extern crate rand;
 
 use ruleset::Ruleset;
+use self::rand::distributions::{IndependentSample, Range};
 
 use self::rustty::{
     Terminal,
     Event,
-    HasSize
+    HasSize,
+    Color
 };
 
 use self::rustty::ui::core::{
@@ -47,6 +50,29 @@ impl Game {
         canvas_.draw_box();
         canvas_.pack(&t_term, HorizontalAlign::Middle, VerticalAlign::Top, (0,0));
 
+        // *******************TEMPORARY**********************************************
+        const BLOCK: Color = Color::White;
+        let (x, y) = (t_width/2, canvas_.size().1/2);
+      
+        let between = Range::new(0, 7);
+        let mut rng = rand::thread_rng();
+
+        for i in 1..(canvas_.size().0 - 1) {
+            for j in  1..(canvas_.size().1 - 1) {
+                let clr = between.ind_sample(&mut rng);
+                canvas_.get_mut(i, j).unwrap().set_bg(Color::Byte(clr));
+            }
+        }
+        
+        /*
+        canvas_.get_mut(x, y).unwrap().set_bg(BLOCK);
+        canvas_.get_mut(x+1, y).unwrap().set_bg(BLOCK);
+        canvas_.get_mut(x+2, y).unwrap().set_bg(BLOCK);
+
+        canvas_.get_mut(x, y+1).unwrap().set_bg(BLOCK);
+        */
+        // *******************TEMPORARY**********************************************
+        
         Game { 
             term: t_term, 
             ruleset: t_ruleset, 
