@@ -5,9 +5,11 @@
  * Any cell that is dead and has exactly three neighbors is born, and alive
 */
 extern crate rustty;
+extern crate rand;
 
 pub mod ruleset;
 pub mod game;
+pub mod grid;
 
 use ruleset::Ruleset;
 use game::Game;

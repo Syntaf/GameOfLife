@@ -1,18 +1,20 @@
-pub const DEFAULT: (u8, u8, u8, u8) = (1u8, 2u8, 4u8, 3u8);
+pub const DEFAULT: (u8, u8, u8, u8, u8) = (1u8, 2u8, 4u8, 3u8, 0x0u8);
 
 pub struct Ruleset {
-    starvation: u8,
-    living: u8,
-    smothered: u8,
-    born: u8
+    pub starvation: u8,
+    pub living: u8,
+    pub smothered: u8,
+    pub born: u8,
+    pub bg: u8
 }
 
 impl Ruleset {
-    pub fn new(rules: (u8, u8, u8, u8)) -> Ruleset {
+    pub fn new(rules: (u8, u8, u8, u8, u8)) -> Ruleset {
         Ruleset { starvation: rules.0,
                   living: rules.1,
                   smothered: rules.2,
-                  born: rules.3 }
+                  born: rules.3,
+                  bg: rules.4   }
     }
 }
 

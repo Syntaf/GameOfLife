@@ -1,24 +1,22 @@
-extern crate rustty; 
-extern crate rand;
-
 use ruleset::Ruleset;
-use self::rand::distributions::{IndependentSample, Range};
+use grid::Grid;
+use rand::distributions::{IndependentSample, Range};
 
-use self::rustty::{
+use rustty::{
     Terminal,
     Event,
     HasSize,
     Color
 };
 
-use self::rustty::ui::core::{
+use rustty::ui::core::{
     Widget,
     HorizontalAlign,
     VerticalAlign,
     ButtonResult,
 };
 
-use self::rustty::ui::{
+use rustty::ui::{
     Dialog,
     Canvas,
     Label,
@@ -29,55 +27,25 @@ pub struct Game {
     term: Terminal,
     ruleset: Ruleset,
     ui: Dialog,
-    canvas: Canvas
+    grid: Grid
 }
 
 impl Game {
     pub fn new(t_term: Terminal, t_ruleset: Ruleset) -> Game {
         let (t_width, t_height) = t_term.size();
 
-        // Do not start game is the terminal is not large enough for UI
-        if t_width < 50 || t_height < 30 {
-            let msg = format!("Terminal must be larger than 50 columns and \
-            30 rows. {}x{} detected", t_width, t_height);
-            panic!(msg);
-        }
-
         let mut ui_ = Game::create_ui(t_width, t_height/5);
         ui_.pack(&t_term, HorizontalAlign::Middle, VerticalAlign::Bottom, (0,0));
 
-        let mut canvas_ = Canvas::new(t_width, t_height - t_height/5);
-        canvas_.draw_box();
-        canvas_.pack(&t_term, HorizontalAlign::Middle, VerticalAlign::Top, (0,0));
+        let mut grid_ = Grid::new(t_width, t_height - t_height/5, t_ruleset.bg);
+        grid_.draw_box();
+        grid_.pack(&t_term, HorizontalAlign::Middle, VerticalAlign::Top, (0,0));
 
-        // *******************TEMPORARY**********************************************
-        const BLOCK: Color = Color::White;
-        let (x, y) = (t_width/2, canvas_.size().1/2);
-      
-        let between = Range::new(0, 7);
-        let mut rng = rand::thread_rng();
-
-        for i in 1..(canvas_.size().0 - 1) {
-            for j in  1..(canvas_.size().1 - 1) {
-                let clr = between.ind_sample(&mut rng);
-                canvas_.get_mut(i, j).unwrap().set_bg(Color::Byte(clr));
-            }
-        }
-        
-        /*
-        canvas_.get_mut(x, y).unwrap().set_bg(BLOCK);
-        canvas_.get_mut(x+1, y).unwrap().set_bg(BLOCK);
-        canvas_.get_mut(x+2, y).unwrap().set_bg(BLOCK);
-
-        canvas_.get_mut(x, y+1).unwrap().set_bg(BLOCK);
-        */
-        // *******************TEMPORARY**********************************************
-        
         Game { 
             term: t_term, 
             ruleset: t_ruleset, 
             ui: ui_, 
-            canvas: canvas_ 
+            grid: grid_ 
         }
     }
 
@@ -138,11 +106,21 @@ impl Game {
 
             // if the game is to be played
             if play {
-
+                let (rows, cols) = self.grid.playable_size();
+                for i in 0..rows {
+                    for j in 0..cols {
+                        match self.grid.neighbors(i, j) {
+                            ruleset.starvation => { },
+                            ruleset.living => { },
+                            ruleset.smothered => { },
+                            ruleset.born => { },
+                        }
+                    }
+                }
             }
 
             self.ui.draw(&mut self.term);
-            self.canvas.draw(&mut self.term);
+            self.grid.draw(&mut self.term);
             self.term.swap_buffers().unwrap();
         }
     }
