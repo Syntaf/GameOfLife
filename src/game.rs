@@ -108,22 +108,24 @@ impl Game {
                 thread::sleep(Duration::from_millis(1000));
                 let (rows, cols) = self.grid.playable_size();
                 let ref ruleset = self.ruleset;
-                for i in 0..rows {
-                    for j in 0..cols {
+                for i in 1..rows {
+                    for j in 1..cols {
                         let ncnt = self.grid.neighbors(i, j);
-                        //panic!("kk");
-                        if ncnt == ruleset.starvation {
-                            //panic!("4");
-                            self.grid.set_dead(i, j);
-                        } else if ncnt == ruleset.living {
-                            //panic!("3");
-                            /* nothing */
-                        } else if ncnt == ruleset.smothered {
-                            //panic!("2");
-                            self.grid.set_dead(i, j);
-                        } else if ncnt == ruleset.born {
-                            let s = format!("neighbors: {}...{}, {}", ncnt, i, j);
-                            //panic!(s);
+                        // conditions for only if the cell is alive
+                        if self.grid.is_alive(i, j) {
+                            //panic!(format!("n-> {}. {} {}", ncnt, i, j));
+                            if ncnt <= ruleset.starvation {
+                                //let s = format!("n-> {}. {},{} dies",ncnt, i, j);
+                                //panic!(s);
+                                self.grid.set_dead(i, j);
+                            } else if ncnt == ruleset.living {
+                                //let s = format!("n-> {}. {},{} lives",ncnt, i, j);
+                                //panic!(s);
+                                /* nothing */
+                            } else if ncnt == ruleset.smothered {
+                                self.grid.set_dead(i, j);
+                            }
+                        } else  if ncnt == ruleset.born {
                             self.grid.set_alive(i, j);
                         }
                     }

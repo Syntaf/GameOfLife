@@ -20,7 +20,7 @@ use rustty::ui::Canvas;
 
 const ADJ: [(i8, i8); 8] = 
     [(-1, -1), (-1, 0), (-1, 1), 
-     (-1, 0), (1, 0), (1, 1), 
+     (0, -1), (0, 1), (1, 1), 
      (1, 0), (1, -1)];
 
 pub struct Grid {
@@ -34,16 +34,13 @@ impl Grid {
         let mut canvas_ = Canvas::new(rows, cols);
         canvas_.draw_box();
 
+        //panic!(format!("{},{}", rows/2, cols/2));
+
         let (x, y) = (rows/2, cols/2);
 
         let color = Range::new(0, 7);
         let mut rng = rand::thread_rng();
-
-        /*
-        canvas_.get_mut(x, y).unwrap().set_bg(Color::Byte(0x6));
-        canvas_.get_mut(x+1, y).unwrap().set_bg(Color::Byte(0x7));
-        canvas_.get_mut(x+2, y).unwrap().set_bg(Color::Byte(0x8));
-        */
+        
         canvas_.get_mut(x, y).unwrap().set_bg(Grid::rand_color());
         canvas_.get_mut(x+1, y).unwrap().set_bg(Grid::rand_color());
         canvas_.get_mut(x+2, y).unwrap().set_bg(Grid::rand_color());
@@ -71,10 +68,10 @@ impl Grid {
         let mut cnt = 0u8;
         for k in ADJ.into_iter() {
             let (i, c) = (k.0, k.1);
-            let (r, j) = (r as i8 + i, j as i8 + c);
-            if r > 0 && j > 0 {
-                let (r, j) = (r as usize, j as usize);
-                if let Some(a) = self.canvas.get(r, j) {
+            let (x, y) = (r as i8 + i, j as i8 + c);
+            if y > 1 && x > 1 {
+                let (x1, y1) = (x as usize, y as usize);
+                if let Some(a) = self.canvas.get(x1, y1) {
                     if a.bg() != Color::Default {
                         cnt += 1;
                     }
