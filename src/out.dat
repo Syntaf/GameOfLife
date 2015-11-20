@@ -1,0 +1,64 @@
+   Compiling CGoL v0.1.0 (file:///home/ghome/Github/gameoflife)
+warning: crate `CGoL` should have a snake case name such as `cgo_l`, #[warn(non_snake_case)] on by default
+game.rs:1:5: 1:24 warning: unused import, #[warn(unused_imports)] on by default
+game.rs:1 use std::time::Duration;
+              ^~~~~~~~~~~~~~~~~~~
+game.rs:2:5: 2:16 warning: unused import, #[warn(unused_imports)] on by default
+game.rs:2 use std::thread;
+              ^~~~~~~~~~~
+game.rs:5:27: 5:44 warning: unused import, #[warn(unused_imports)] on by default
+game.rs:5 use rand::distributions::{IndependentSample, Range};
+                                    ^~~~~~~~~~~~~~~~~
+game.rs:5:46: 5:51 warning: unused import, #[warn(unused_imports)] on by default
+game.rs:5 use rand::distributions::{IndependentSample, Range};
+                                                       ^~~~~
+game.rs:11:5: 11:10 warning: unused import, #[warn(unused_imports)] on by default
+game.rs:11     Color
+               ^~~~~
+game.rs:23:5: 23:11 warning: unused import, #[warn(unused_imports)] on by default
+game.rs:23     Canvas,
+               ^~~~~~
+game.rs:119:29: 119:54 warning: unreachable statement, #[warn(unreachable_code)] on by default
+game.rs:119                             self.grid.set_dead(i, j);
+                                        ^~~~~~~~~~~~~~~~~~~~~~~~~
+game.rs:115:21: 131:22 note: in this expansion of for loop expansion
+game.rs:114:17: 132:18 note: in this expansion of for loop expansion
+game.rs:125:29: 125:54 warning: unreachable statement, #[warn(unreachable_code)] on by default
+game.rs:125                             self.grid.set_dead(i, j);
+                                        ^~~~~~~~~~~~~~~~~~~~~~~~~
+game.rs:115:21: 131:22 note: in this expansion of for loop expansion
+game.rs:114:17: 132:18 note: in this expansion of for loop expansion
+grid.rs:7:5: 7:8 warning: unused import, #[warn(unused_imports)] on by default
+grid.rs:7     Pos,
+              ^~~
+grid.rs:8:5: 8:16 warning: unused import, #[warn(unused_imports)] on by default
+grid.rs:8     HasPosition,
+              ^~~~~~~~~~~
+grid.rs:9:5: 9:9 warning: unused import, #[warn(unused_imports)] on by default
+grid.rs:9     Cell,
+              ^~~~
+grid.rs:16:5: 16:14 warning: unused import, #[warn(unused_imports)] on by default
+grid.rs:16     Alignable,
+               ^~~~~~~~~
+grid.rs:35:42: 35:45 warning: unused variable: `bg_`, #[warn(unused_variables)] on by default
+grid.rs:35     pub fn new(rows: usize, cols: usize, bg_: u8) -> Grid {
+                                                    ^~~
+grid.rs:43:13: 43:18 warning: unused variable: `color`, #[warn(unused_variables)] on by default
+grid.rs:43         let color = Range::new(0, 7);
+                       ^~~~~
+grid.rs:44:13: 44:20 warning: unused variable: `rng`, #[warn(unused_variables)] on by default
+grid.rs:44         let mut rng = rand::thread_rng();
+                       ^~~~~~~
+grid.rs:44:13: 44:20 warning: variable does not need to be mutable, #[warn(unused_mut)] on by default
+grid.rs:44         let mut rng = rand::thread_rng();
+                       ^~~~~~~
+main.rs:17:15: 17:19 warning: unused import, #[warn(unused_imports)] on by default
+main.rs:17 use std::io::{self, BufRead};
+                         ^~~~
+main.rs:17:21: 17:28 warning: unused import, #[warn(unused_imports)] on by default
+main.rs:17 use std::io::{self, BufRead};
+                               ^~~~~~~
+main.rs:20:9: 20:17 warning: variable does not need to be mutable, #[warn(unused_mut)] on by default
+main.rs:20     let mut term = rustty::Terminal::new().unwrap();
+                   ^~~~~~~~
+     Running `/home/ghome/Github/gameoflife/target/debug/CGoL`

@@ -1,12 +1,12 @@
+use std::time::Duration;
+use std::thread;
 use ruleset::Ruleset;
 use grid::Grid;
-use rand::distributions::{IndependentSample, Range};
 
 use rustty::{
     Terminal,
     Event,
-    HasSize,
-    Color
+    HasSize
 };
 
 use rustty::ui::core::{
@@ -18,7 +18,6 @@ use rustty::ui::core::{
 
 use rustty::ui::{
     Dialog,
-    Canvas,
     Label,
     StdButton
 };
@@ -37,7 +36,7 @@ impl Game {
         let mut ui_ = Game::create_ui(t_width, t_height/5);
         ui_.pack(&t_term, HorizontalAlign::Middle, VerticalAlign::Bottom, (0,0));
 
-        let mut grid_ = Grid::new(t_width, t_height - t_height/5, t_ruleset.bg);
+        let mut grid_ = Grid::new(t_width, t_height - t_height/5);
         grid_.draw_box();
         grid_.pack(&t_term, HorizontalAlign::Middle, VerticalAlign::Top, (0,0));
 
@@ -106,14 +105,26 @@ impl Game {
 
             // if the game is to be played
             if play {
+                thread::sleep(Duration::from_millis(1000));
                 let (rows, cols) = self.grid.playable_size();
+                let ref ruleset = self.ruleset;
                 for i in 0..rows {
                     for j in 0..cols {
-                        match self.grid.neighbors(i, j) {
-                            ruleset.starvation => { },
-                            ruleset.living => { },
-                            ruleset.smothered => { },
-                            ruleset.born => { },
+                        let ncnt = self.grid.neighbors(i, j);
+                        //panic!("kk");
+                        if ncnt == ruleset.starvation {
+                            //panic!("4");
+                            self.grid.set_dead(i, j);
+                        } else if ncnt == ruleset.living {
+                            //panic!("3");
+                            /* nothing */
+                        } else if ncnt == ruleset.smothered {
+                            //panic!("2");
+                            self.grid.set_dead(i, j);
+                        } else if ncnt == ruleset.born {
+                            let s = format!("neighbors: {}...{}, {}", ncnt, i, j);
+                            //panic!(s);
+                            self.grid.set_alive(i, j);
                         }
                     }
                 }

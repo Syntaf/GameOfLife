@@ -4,16 +4,12 @@ use rand;
 use rustty::{
     Size, 
     HasSize,
-    Pos,
-    HasPosition,
-    Cell,
     CellAccessor,
     Color
 };
 
 use rustty::ui::core::{
     Widget,
-    Alignable,
     Frame,
     Painter,
     HorizontalAlign,
@@ -22,13 +18,17 @@ use rustty::ui::core::{
 
 use rustty::ui::Canvas;
 
+const ADJ: [(i8, i8); 8] = 
+    [(-1, -1), (-1, 0), (-1, 1), 
+     (-1, 0), (1, 0), (1, 1), 
+     (1, 0), (1, -1)];
+
 pub struct Grid {
     canvas: Canvas,
-    bg: u8
 }
 
 impl Grid {
-    pub fn new(rows: usize, cols: usize, bg_: u8) -> Grid {
+    pub fn new(rows: usize, cols: usize) -> Grid {
         // Create a canvas of rows by cols. The border of the canvas
         // will take up 1x1, so the actual size of raw is one less
         let mut canvas_ = Canvas::new(rows, cols);
@@ -39,13 +39,18 @@ impl Grid {
         let color = Range::new(0, 7);
         let mut rng = rand::thread_rng();
 
+        /*
+        canvas_.get_mut(x, y).unwrap().set_bg(Color::Byte(0x6));
+        canvas_.get_mut(x+1, y).unwrap().set_bg(Color::Byte(0x7));
+        canvas_.get_mut(x+2, y).unwrap().set_bg(Color::Byte(0x8));
+        */
         canvas_.get_mut(x, y).unwrap().set_bg(Grid::rand_color());
         canvas_.get_mut(x+1, y).unwrap().set_bg(Grid::rand_color());
         canvas_.get_mut(x+2, y).unwrap().set_bg(Grid::rand_color());
+        
 
         Grid {
             canvas: canvas_,
-            bg: bg_
         }
     }
 
@@ -62,21 +67,34 @@ impl Grid {
             })
     }
 
-    pub fn neighbors(&self, r: usize, j: usize) -> u32{
-        
+    pub fn neighbors(&self, r: usize, j: usize) -> u8{
+        let mut cnt = 0u8;
+        for k in ADJ.into_iter() {
+            let (i, c) = (k.0, k.1);
+            let (r, j) = (r as i8 + i, j as i8 + c);
+            if r > 0 && j > 0 {
+                let (r, j) = (r as usize, j as usize);
+                if let Some(a) = self.canvas.get(r, j) {
+                    if a.bg() != Color::Default {
+                        cnt += 1;
+                    }
+                }
+            }
+        }
+        cnt
     }
 
     pub fn set_alive(&mut self, r: usize, j: usize) {
-         
+        self.canvas.get_mut(r, j).unwrap().set_bg(Grid::rand_color()); 
     }
 
     pub fn set_dead(&mut self, r: usize, j: usize) {
-        self.canvas.get_mut(r, j).unwrap().set_bg(Color::byte(self.bg));
+        self.canvas.get_mut(r, j).unwrap().set_bg(Color::Default);
     }
 
     pub fn is_alive(&self, r: usize, j: usize) -> bool {
-        if self.canvas.get(r, j).unwrap().bg() != Color::byte(self.bg) {
-            true
+        if self.canvas.get(r, j).unwrap().bg() != Color::Default {
+            return true
         }
         false
     }

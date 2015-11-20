@@ -1,5 +1,5 @@
 [package]
-name = "CGoL"
+name = "GameOfLife"
 version = "0.1.0"
 authors = ["Syntaf <gmercer015@gmail.com>"]
 
