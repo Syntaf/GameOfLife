@@ -1,5 +1,3 @@
-use std::time::Duration;
-use std::thread;
 use ruleset::Ruleset;
 use grid::Grid;
 
@@ -60,7 +58,7 @@ impl Game {
         play.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Bottom, (2,5));
         dlg.add_button(play);
 
-        let mut stop = StdButton::new("Stop", 's', ButtonResult::Custom(2));
+        let mut stop = StdButton::new("Stop", 'o', ButtonResult::Custom(2));
         stop.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Bottom, (2,4));
         dlg.add_button(stop);
         
@@ -86,7 +84,7 @@ impl Game {
     pub fn run(&mut self) {
         let mut play = false;
         'main: loop {
-            while let Some(Event::Key(ch)) = self.term.get_event(0).unwrap() {
+            while let Some(Event::Key(ch)) = self.term.get_event(750).unwrap() {
                 match self.ui.result_for_key(ch) {
                     Some(ButtonResult::Ok) => break 'main,
                     Some(ButtonResult::Custom(i)) => {
@@ -105,7 +103,6 @@ impl Game {
 
             // if the game is to be played
             if play {
-                thread::sleep(Duration::from_millis(750));
                 let (cols, rows) = self.grid.playable_size();
                 let ref ruleset = self.ruleset;
                 for y in 1..rows {

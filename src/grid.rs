@@ -4,7 +4,6 @@ use rand;
 use rustty::{
     Size, 
     HasSize,
-    Cell,
     CellAccessor,
     Color
 };
@@ -36,19 +35,16 @@ pub struct Grid {
 
 impl Grid {
     pub fn new(cols: usize, rows: usize) -> Grid {
-        // Create a canvas of rows by cols. The border of the canvas
-        // will take up 1x1, so the actual size of raw is one less
         let mut canvas_ = Canvas::new(cols, rows);
         canvas_.draw_box();
 
         let (x, y) = (cols/2, rows/2);
 
-        let color = Range::new(0, 7);
-        let mut rng = rand::thread_rng();
-
+        // *******************TEMPORARY CELL CREATION**********************
         canvas_.get_mut(x, y).unwrap().set_bg(Grid::rand_color());
         canvas_.get_mut(x+1, y).unwrap().set_bg(Grid::rand_color());
         canvas_.get_mut(x+2, y).unwrap().set_bg(Grid::rand_color());
+        // *******************TEMPORARY CELL CREATION**********************
         
 
         Grid {
@@ -72,6 +68,8 @@ impl Grid {
 
     pub fn neighbors(&self, x: usize, y: usize) -> u8{
         let mut cnt = 0u8;
+        // for every adjacent cell, check whether it's color is empty or not
+        // if the color is not empty, it is alive and considered a neighbor
         for &(r, c) in &ADJ {
             let (x1, y1) = (x as i32 + r, y as i32 + c);
             if x1 > 1 && y1 > 1 {
@@ -87,35 +85,34 @@ impl Grid {
     }
 
     pub fn set_alive(&mut self, x: usize, y: usize) {
+        // create an action that will create life at this cell
         self.actions.push(
             ((x, y),
              Action::Create)
             );
-        //self.canvas.get_mut(r, j).unwrap().set_bg(Grid::rand_color()); 
     }
 
     pub fn set_dead(&mut self, x: usize, y: usize) {
+        // create an action this will kill this cell
         self.actions.push(
             ((x, y),
              Action::Kill)
             );
-        //self.canvas.get_mut(r, j).unwrap().set_bg(Color::Default);
     }
 
     pub fn is_alive(&self, x: usize, y: usize) -> bool {
-        if self.canvas.get(x, y) == None { 
-            panic!(format!("{}, {}", x, y));
-        }
         if self.canvas.get(x, y).unwrap().bg() != Color::Default {
             return true
         }
         false
     }
 
+    // Ensure the borders of the canvas are not used 
     pub fn playable_size(&self) -> Size {
         (self.canvas.size().0 - 1, self.canvas.size().1 - 1)
     }
 
+    // Apply all actions
     pub fn update(&mut self) {
         while let Some(((x, y), act)) = self.actions.pop() {
             match act { 
