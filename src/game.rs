@@ -83,6 +83,7 @@ impl Game {
 
     pub fn run(&mut self) {
         let mut play = false;
+        // We don't want to wait 750 ms before the program starts, so 0 timeout
         let mut timeout = 0;
         'main: loop {
             while let Some(Event::Key(ch)) = self.term.get_event(timeout).unwrap() {
@@ -101,12 +102,14 @@ impl Game {
                      _  => {},
                 }
             }
-            timeout = 750;
+            timeout = 150;
 
             // if the game is to be played
             if play {
                 let (cols, rows) = self.grid.playable_size();
                 let ref ruleset = self.ruleset;
+
+                // Iterate over the playable region
                 for y in 1..rows {
                     for x in 1..cols {
                         let ncnt = self.grid.neighbors(x, y);
@@ -116,10 +119,10 @@ impl Game {
                                 self.grid.set_dead(x, y);
                             } else if ncnt == ruleset.living {
                                 /* nothing */
-                            } else if ncnt == ruleset.smothered {
+                            } else if ncnt >= ruleset.smothered {
                                 self.grid.set_dead(x, y);
                             }
-                        } else  if ncnt == ruleset.born {
+                        } else  if ncnt >= ruleset.born && ncnt < ruleset.smothered {
                             self.grid.set_alive(x, y);
                         }
                     }
@@ -128,6 +131,7 @@ impl Game {
                 self.grid.update();
             }
 
+            // Display the grid and ui to the screen
             self.ui.draw(&mut self.term);
             self.grid.draw(&mut self.term);
             self.term.swap_buffers().unwrap();

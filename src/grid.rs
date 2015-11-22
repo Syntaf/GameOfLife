@@ -42,8 +42,14 @@ impl Grid {
 
         // *******************TEMPORARY CELL CREATION**********************
         canvas_.get_mut(x, y).unwrap().set_bg(Grid::rand_color());
-        canvas_.get_mut(x+1, y).unwrap().set_bg(Grid::rand_color());
-        canvas_.get_mut(x+2, y).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x-1, y+1).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x-1, y+2).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x-1, y+3).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x, y+3).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+1, y+3).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+2, y+3).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+3, y).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+3, y+2).unwrap().set_bg(Grid::rand_color());
         // *******************TEMPORARY CELL CREATION**********************
         
 
