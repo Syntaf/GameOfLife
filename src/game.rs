@@ -20,6 +20,8 @@ use rustty::ui::{
     StdButton
 };
 
+use settings;
+
 pub struct Game {
     term: Terminal,
     ruleset: Ruleset,
@@ -91,9 +93,10 @@ impl Game {
                     Some(ButtonResult::Ok) => break 'main,
                     Some(ButtonResult::Custom(i)) => {
                         match i {
-                            1   => {play = true},
-                            2   => {play = false},
-                            3   => { /* settings */ },
+                            1   => { play = true; },
+                            2   => { play = false; },
+                            3   => { settings::open(&mut self.ruleset, &mut self.term);
+                                     play = false; },
                             4   => { /* help */ },
                             5   => { /* about */ },
                             _   => {}

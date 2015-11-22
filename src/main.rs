@@ -10,6 +10,7 @@ extern crate rand;
 pub mod ruleset;
 pub mod game;
 pub mod grid;
+pub mod settings;
 
 use ruleset::Ruleset;
 use game::Game;
