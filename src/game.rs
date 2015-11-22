@@ -102,7 +102,7 @@ impl Game {
                      _  => {},
                 }
             }
-            timeout = 150;
+            timeout = 50;
 
             // if the game is to be played
             if play {

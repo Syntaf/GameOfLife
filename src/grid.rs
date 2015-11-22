@@ -38,18 +38,54 @@ impl Grid {
         let mut canvas_ = Canvas::new(cols, rows);
         canvas_.draw_box();
 
-        let (x, y) = (cols/2, rows/2);
+        let (x, y) = (20, 8);
 
         // *******************TEMPORARY CELL CREATION**********************
+        
+        // Left static block 
+        canvas_.get_mut(x-9, y).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x-9, y+1).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x-10, y).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x-10, y+1).unwrap().set_bg(Grid::rand_color());
+
+        // Left creator
         canvas_.get_mut(x, y).unwrap().set_bg(Grid::rand_color());
-        canvas_.get_mut(x-1, y+1).unwrap().set_bg(Grid::rand_color());
-        canvas_.get_mut(x-1, y+2).unwrap().set_bg(Grid::rand_color());
-        canvas_.get_mut(x-1, y+3).unwrap().set_bg(Grid::rand_color());
-        canvas_.get_mut(x, y+3).unwrap().set_bg(Grid::rand_color());
-        canvas_.get_mut(x+1, y+3).unwrap().set_bg(Grid::rand_color());
-        canvas_.get_mut(x+2, y+3).unwrap().set_bg(Grid::rand_color());
-        canvas_.get_mut(x+3, y).unwrap().set_bg(Grid::rand_color());
-        canvas_.get_mut(x+3, y+2).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x, y+1).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x, y-1).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+1,y+2).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+1,y-2).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+2,y+3).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+2,y-3).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+3,y+3).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+3,y-3).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+4, y).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+5, y-2).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+5, y+2).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+6, y).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+6, y-1).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+6, y+1).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+7, y).unwrap().set_bg(Grid::rand_color());
+
+        // Right creator
+        let (x, y) = (x + 10, y - 2);
+        canvas_.get_mut(x, y).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x, y+1).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x, y-1).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+1, y).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+1, y+1).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+1, y-1).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+2, y+2).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+2, y-2).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+4, y+2).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+4, y-2).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+4, y+3).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+4, y-3).unwrap().set_bg(Grid::rand_color());
+
+        // Right static block
+        canvas_.get_mut(x+14, y).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+14, y-1).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+15, y).unwrap().set_bg(Grid::rand_color());
+        canvas_.get_mut(x+15, y-1).unwrap().set_bg(Grid::rand_color());
         // *******************TEMPORARY CELL CREATION**********************
         
 
