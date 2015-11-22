@@ -105,31 +105,28 @@ impl Game {
 
             // if the game is to be played
             if play {
-                thread::sleep(Duration::from_millis(1000));
-                let (rows, cols) = self.grid.playable_size();
+                thread::sleep(Duration::from_millis(750));
+                let (cols, rows) = self.grid.playable_size();
                 let ref ruleset = self.ruleset;
-                for i in 1..rows {
-                    for j in 1..cols {
-                        let ncnt = self.grid.neighbors(i, j);
+                for y in 1..rows {
+                    for x in 1..cols {
+                        let ncnt = self.grid.neighbors(x, y);
                         // conditions for only if the cell is alive
-                        if self.grid.is_alive(i, j) {
-                            //panic!(format!("n-> {}. {} {}", ncnt, i, j));
+                        if self.grid.is_alive(x, y) {
                             if ncnt <= ruleset.starvation {
-                                //let s = format!("n-> {}. {},{} dies",ncnt, i, j);
-                                //panic!(s);
-                                self.grid.set_dead(i, j);
+                                self.grid.set_dead(x, y);
                             } else if ncnt == ruleset.living {
-                                //let s = format!("n-> {}. {},{} lives",ncnt, i, j);
-                                //panic!(s);
                                 /* nothing */
                             } else if ncnt == ruleset.smothered {
-                                self.grid.set_dead(i, j);
+                                self.grid.set_dead(x, y);
                             }
                         } else  if ncnt == ruleset.born {
-                            self.grid.set_alive(i, j);
+                            self.grid.set_alive(x, y);
                         }
                     }
                 }
+                // The cell actions above are not recorded until an update is called
+                self.grid.update();
             }
 
             self.ui.draw(&mut self.term);
