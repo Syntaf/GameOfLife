@@ -83,8 +83,9 @@ impl Game {
 
     pub fn run(&mut self) {
         let mut play = false;
+        let mut timeout = 0;
         'main: loop {
-            while let Some(Event::Key(ch)) = self.term.get_event(750).unwrap() {
+            while let Some(Event::Key(ch)) = self.term.get_event(timeout).unwrap() {
                 match self.ui.result_for_key(ch) {
                     Some(ButtonResult::Ok) => break 'main,
                     Some(ButtonResult::Custom(i)) => {
@@ -100,6 +101,7 @@ impl Game {
                      _  => {},
                 }
             }
+            timeout = 750;
 
             // if the game is to be played
             if play {
