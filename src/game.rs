@@ -26,6 +26,7 @@ pub struct Game {
     term: Terminal,
     ruleset: Ruleset,
     ui: Dialog,
+    stat_ui: Dialog,
     grid: Grid
 }
 
@@ -33,8 +34,11 @@ impl Game {
     pub fn new(t_term: Terminal, t_ruleset: Ruleset) -> Game {
         let (t_width, t_height) = t_term.size();
 
-        let mut ui_ = Game::create_ui(t_width, t_height/5);
-        ui_.pack(&t_term, HorizontalAlign::Middle, VerticalAlign::Bottom, (0,0));
+        let mut ui_ = Game::create_ui(2 * t_width/3, t_height/5);
+        ui_.pack(&t_term, HorizontalAlign::Left, VerticalAlign::Bottom, (0,0));
+
+        let mut stat_ui_ = Game::create_stats(t_width/3, t_height/5);
+        stat_ui_.pack(&t_term, HorizontalAlign::Right, VerticalAlign::Bottom, (0,0));
 
         let mut grid_ = Grid::new(t_width, t_height - t_height/5);
         grid_.draw_box();
@@ -44,16 +48,30 @@ impl Game {
             term: t_term, 
             ruleset: t_ruleset, 
             ui: ui_, 
+            stat_ui: stat_ui_,
             grid: grid_ 
         }
+    }
+
+    fn create_stats(width: usize, height: usize) -> Dialog {
+        let mut dlg = Dialog::new(width, height);
+        dlg.draw_box();
+
+        let mut title = Label::from_str("Stats will be displayed here");
+        title.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (2, 1));
+        dlg.add_label(title);
+
+        dlg
     }
 
     fn create_ui(width: usize, height: usize) -> Dialog {
         let mut dlg = Dialog::new(width, height);
         dlg.draw_box();
 
+        const COLUMN_SEP : usize = 16;
+
         let mut title = Label::from_str("Welcome to the console based game of life!");
-        title.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (1,1));
+        title.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (2,1));
         dlg.add_label(title);
         
         let mut play = StdButton::new("Play", 'p', ButtonResult::Custom(1));
@@ -69,15 +87,15 @@ impl Game {
         dlg.add_button(settings);
 
         let mut quit = StdButton::new("Quit", 'q', ButtonResult::Ok);
-        quit.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Bottom, (2,2));
+        quit.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Bottom, (2+COLUMN_SEP,5));
         dlg.add_button(quit);
 
         let mut help = StdButton::new("Help", 'h', ButtonResult::Custom(4));
-        help.pack(&dlg, HorizontalAlign::Right, VerticalAlign::Bottom, (2, 5));
+        help.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Bottom, (2+COLUMN_SEP, 4));
         dlg.add_button(help);
 
         let mut about = StdButton::new("About", 'a', ButtonResult::Custom(5));
-        about.pack(&dlg, HorizontalAlign::Right, VerticalAlign::Bottom, (2, 4));
+        about.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Bottom, (2+COLUMN_SEP, 3));
         dlg.add_button(about);
 
         dlg
@@ -136,6 +154,7 @@ impl Game {
 
             // Display the grid and ui to the screen
             self.ui.draw(&mut self.term);
+            self.stat_ui.draw(&mut self.term);
             self.grid.draw(&mut self.term);
             self.term.swap_buffers().unwrap();
         }
