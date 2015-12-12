@@ -34,6 +34,12 @@ impl Game {
     pub fn new(t_term: Terminal, t_ruleset: Ruleset) -> Game {
         let (t_width, t_height) = t_term.size();
 
+        if t_width < 80 || t_height < 34 {
+            panic!(format!("Terminal size too small({}x{}), must be at least \
+                            {}x{} (columns x rows)",
+                t_width, t_height, 80, 34));
+        }
+
         let mut ui_ = Game::create_ui(2 * t_width/3, t_height/5);
         ui_.pack(&t_term, HorizontalAlign::Left, VerticalAlign::Bottom, (0,0));
 
