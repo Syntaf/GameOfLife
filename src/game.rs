@@ -17,10 +17,12 @@ use rustty::ui::core::{
 use rustty::ui::{
     Dialog,
     Label,
-    StdButton
+    StdButton,
+    CheckButton
 };
 
 use settings;
+use help;
 
 pub struct Game {
     term: Terminal,
@@ -100,9 +102,21 @@ impl Game {
         help.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Bottom, (2+COLUMN_SEP, 4));
         dlg.add_button(help);
 
-        let mut about = StdButton::new("About", 'a', ButtonResult::Custom(5));
+        let mut about = CheckButton::new("About", 'a', ButtonResult::Custom(5));
         about.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Bottom, (2+COLUMN_SEP, 3));
         dlg.add_button(about);
+
+        let mut editor = StdButton::new("Editor", 'e', ButtonResult::Custom(6));
+        editor.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Bottom, (2+2*COLUMN_SEP, 5));
+        dlg.add_button(editor);
+
+        let mut rnd = StdButton::new("Randomize", 'r', ButtonResult::Custom(7));
+        rnd.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Bottom, (2+2*COLUMN_SEP, 4));
+        dlg.add_button(rnd);
+
+        let mut preset = StdButton::new("Preset", 't', ButtonResult::Custom(8));
+        preset.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Bottom, (2+2*COLUMN_SEP, 3));
+        dlg.add_button(preset);
 
         dlg
     }
@@ -121,8 +135,9 @@ impl Game {
                             2   => { play = false; },
                             3   => { settings::open(&mut self.ruleset, &mut self.term);
                                      play = false; },
-                            4   => { /* help */ },
-                            5   => { /* about */ },
+                            4   => { help::open(&self.ruleset, &mut self.term);
+                                     play = false; },
+                            5   => { self.ui.button_pressed(ButtonResult::Custom(5)); },
                             _   => {}
                         }
                     }

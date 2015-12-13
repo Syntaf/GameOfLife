@@ -4,5 +4,5 @@ version = "0.1.0"
 authors = ["Syntaf <gmercer015@gmail.com>"]
 
 [dependencies]
-rustty = { git = "https://github.com/Syntaf/rustty.git" }
 rand = "*"
+rustty = { git = "https://github.com/Syntaf/rustty.git", branch = "widget_redesign" }
