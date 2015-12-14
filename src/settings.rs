@@ -46,11 +46,11 @@ fn create_ui(width: usize, height: usize,rules: &Ruleset) -> Dialog {
     title.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (2,1));
     dlg.add_label(title);
 
-    let category1_s = 10;
-    let mut category1 = Label::new(width/3 + 2, 4);
+    let category1_s = 6;
+    let mut category1 = Label::new(width/3, 3);
     category1.align_text(HorizontalAlign::Left, VerticalAlign::Top, (0,0));
-    category1.set_text(format!("Generation rules, numerical values represent the number of neighbors \
-                        required for an action to take place. {:-<30}","-"));
+    category1.set_text("Generational Rules: ".to_string() 
+                       + &(0..width/3-1).map(|_| "─").collect::<String>());
     category1.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (2, 3));
     dlg.add_label(category1);
 
@@ -69,6 +69,18 @@ fn create_ui(width: usize, height: usize,rules: &Ruleset) -> Dialog {
     let mut born_b = StdButton::new(&format!("{:<15} [{}]", "Born", rules.born), 'b', ButtonResult::Custom(4));
     born_b.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (2,category1_s+3));
     dlg.add_button(born_b);
+
+    let category2_s = category1_s+7;
+    let mut category2 = Label::new(width/3, 3);
+    category2.align_text(HorizontalAlign::Left, VerticalAlign::Top, (0,0));
+    category2.set_text("Randomize ".to_string()
+                       + &(0..width/3-1).map(|_| "─").collect::<String>());
+    category2.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (2, category1_s+5));
+    dlg.add_label(category2);
+   
+    let mut dist_b = StdButton::new(&format!("Percent of Alive Cells Distribution [{}]", rules.distribution), 'p', ButtonResult::Custom(5));
+    dist_b.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (2, category2_s+1));
+    dlg.add_button(dist_b);
 
     let mut quit = StdButton::new("Quit", 'q', ButtonResult::Ok);
     quit.pack(&dlg, HorizontalAlign::Right, VerticalAlign::Bottom, (2,1));

@@ -17,8 +17,7 @@ use rustty::ui::core::{
 use rustty::ui::{
     Dialog,
     Label,
-    StdButton,
-    CheckButton
+    StdButton
 };
 
 use settings;
@@ -36,7 +35,7 @@ impl Game {
     pub fn new(t_term: Terminal, t_ruleset: Ruleset) -> Game {
         let (t_width, t_height) = t_term.size();
 
-        if t_width < 80 || t_height < 34 {
+        if t_width < 80 || t_height < 40 {
             panic!(format!("Terminal size too small({}x{}), must be at least \
                             {}x{} (columns x rows)",
                 t_width, t_height, 80, 34));
@@ -102,7 +101,7 @@ impl Game {
         help.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Bottom, (2+COLUMN_SEP, 4));
         dlg.add_button(help);
 
-        let mut about = CheckButton::new("About", 'a', ButtonResult::Custom(5));
+        let mut about = StdButton::new("About", 'a', ButtonResult::Custom(5));
         about.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Bottom, (2+COLUMN_SEP, 3));
         dlg.add_button(about);
 
@@ -137,7 +136,7 @@ impl Game {
                                      play = false; },
                             4   => { help::open(&self.ruleset, &mut self.term);
                                      play = false; },
-                            5   => { self.ui.button_pressed(ButtonResult::Custom(5)); },
+                            5   => { /* */ },
                             _   => {}
                         }
                     }
