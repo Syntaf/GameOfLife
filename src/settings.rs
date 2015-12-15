@@ -23,16 +23,17 @@ use input;
 
 const CATEGORY1_S: usize = 6;
 const CATEGORY2_S: usize = CATEGORY1_S + 7;
+const CATEGORY3_S: usize = CATEGORY2_S + 6;
 
 pub fn open(_ruleset: &mut Ruleset, term: &mut Terminal) {
     let (t_width, t_height) = term.size();
 
-    let mut ui_ = create_ui(t_width/2, t_height/2, &_ruleset);
+    let mut ui_ = create_ui(t_width/2, t_height - t_height/3 + 2, &_ruleset);
     ui_.pack(term, HorizontalAlign::Middle, VerticalAlign::Middle, (0,0));
 
     // Rules with a value of -1 will not be updated when Ruleset::update() is
     // called, thus start all rules empty
-    let mut new_rules: Vec<i32> = vec![-1,-1,-1,-1,-1];
+    let mut new_rules: Vec<i32> = vec![-1,-1,-1,-1,-1,-1];
     // Errors are displayed through error_lbl with the text as errors
     let mut error_lbl = Label::new(23,1);
     error_lbl.pack(&ui_, HorizontalAlign::Left, VerticalAlign::Bottom, (1,1));
@@ -51,7 +52,7 @@ pub fn open(_ruleset: &mut Ruleset, term: &mut Terminal) {
                             } else {
                                 errors = "Invalid value(0-8)".to_string();
                             }
-                        } else {
+                        } else if i == 5 {
                             // options > 5 are rules for randomization, thus cannot exceed
                             // 100% of the board
                             if res <= 100 {
@@ -59,6 +60,8 @@ pub fn open(_ruleset: &mut Ruleset, term: &mut Terminal) {
                             } else {
                                 errors = "Invalid value(0-100)".to_string();
                             }
+                        } else {
+                            new_rules[(i-1) as usize] = res as i32;
                         }
                     }
                 },
@@ -99,7 +102,14 @@ fn create_ui(width: usize, height: usize,rules: &Ruleset) -> Dialog {
                        + &(0..width/3-1).map(|_| "─").collect::<String>());
     category2.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (2, CATEGORY1_S+5));
     dlg.add_label(category2);
-  
+
+    let mut category3 = Label::new(width/3, 3);
+    category3.align_text(HorizontalAlign::Left, VerticalAlign::Top, (0,0));
+    category3.set_text("Game Speed ".to_string()
+                       + &(0..width/3-1).map(|_| "─").collect::<String>());
+    category3.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (2, CATEGORY2_S+3));
+    dlg.add_label(category3);
+
     draw_buttons(&mut dlg, rules);
 
     dlg
@@ -125,6 +135,10 @@ fn draw_buttons(dlg: &mut Dialog, rules: &Ruleset) {
     let mut dist_b = StdButton::new(&format!("Percent Alive [{}%]", rules.distribution), 'p', ButtonResult::Custom(5));
     dist_b.pack(dlg, HorizontalAlign::Left, VerticalAlign::Top, (2, CATEGORY2_S+1));
     dlg.add_button(dist_b);
+
+    let mut speed_b = StdButton::new(&format!("Delay/Iteration [{}]", rules.speed), 'd', ButtonResult::Custom(6));
+    speed_b.pack(dlg, HorizontalAlign::Left, VerticalAlign::Top, (2, CATEGORY3_S));
+    dlg.add_button(speed_b);
 
     let mut quit = StdButton::new("Quit", 'q', ButtonResult::Ok);
     quit.pack(dlg, HorizontalAlign::Right, VerticalAlign::Bottom, (2,1));

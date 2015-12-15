@@ -145,7 +145,7 @@ impl Game {
                      _  => {},
                 }
             }
-            timeout = 50;
+            timeout = self.ruleset.speed as isize;
 
             // if the game is to be played
             if play {
