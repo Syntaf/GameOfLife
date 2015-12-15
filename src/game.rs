@@ -22,6 +22,7 @@ use rustty::ui::{
 
 use settings;
 use help;
+use about;
 
 // Hold all UI elements and perform game logic within a 
 // main loop
@@ -136,11 +137,13 @@ impl Game {
                         match i {
                             1   => { play = true; },
                             2   => { play = false; },
-                            3   => { settings::open(&mut self.ruleset, &mut self.term);
+                            3   => { settings::open(&mut self.ruleset, 
+                                                    &mut self.term);
                                      play = false; },
                             4   => { help::open(&self.ruleset, &mut self.term);
                                      play = false; },
-                            5   => { /* */ },
+                            5   => { about::open(&mut self.term);
+                                     play = false; },
                             _   => {}
                         }
                     }
