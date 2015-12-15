@@ -18,6 +18,7 @@ use ruleset::Ruleset;
 use game::Game;
 
 fn main() {
+    // Declare a terminal, default ruleset and new game
     let term = rustty::Terminal::new().unwrap();
     let ruleset = Ruleset::new(ruleset::DEFAULT);
     let mut game = Game::new(term, ruleset);

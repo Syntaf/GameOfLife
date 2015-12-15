@@ -18,16 +18,26 @@ use rustty::ui::core::{
 
 use rustty::ui::Canvas;
 
+// Array containing coordinates for calculating
+// all adjacent neighbors nearby 
 const ADJ: [(i32, i32); 8] = 
     [(-1, -1), (-1, 0), (-1, 1), 
      (0, -1), (0, 1), (1, 1), 
      (1, 0), (1, -1)];
 
+// Each generation will decide whether a cell is
+// unchanged, created, or killed
 pub enum Action {
    Create,
    Kill
 }
 
+// The grid is a UI object which wraps a canvas and contains
+// a vector of actions and coordinates. Areas of a canvas are
+// marked with actions each iteration and actions are stored
+// in the actions vector. At the end of each iteration the 
+// actions vector is iterated over and all actions are applied
+// to create the new generation
 pub struct Grid {
     canvas: Canvas,
     actions: Vec<((usize, usize), Action)>
@@ -99,6 +109,8 @@ impl Grid {
         let color = Range::new(0, 6);
         let mut rng = rand::thread_rng();
 
+        // Generate random color not including the background 
+        // color of the console
         let value = color.ind_sample(&mut rng);
         Color::Byte(
             if value >= 3 {

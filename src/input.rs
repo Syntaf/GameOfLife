@@ -22,6 +22,8 @@ pub fn integer_prompt(term: &mut Terminal) -> Option<u32> {
     let mut prompt = create_prompt(width, height);
     prompt.pack(term, HorizontalAlign::Middle, VerticalAlign::Middle, (0,0));
 
+    // TO-DO: Fix this abomination, this code segment is HORRIBLE due to a bug
+    // discovered in the rustty fork
     let mut value = "_".to_string();
     let mut input = Label::new(15,1);
     input.pack(&prompt, HorizontalAlign::Middle, VerticalAlign::Middle, (0,0));

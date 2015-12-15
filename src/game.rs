@@ -23,6 +23,8 @@ use rustty::ui::{
 use settings;
 use help;
 
+// Hold all UI elements and perform game logic within a 
+// main loop
 pub struct Game {
     term: Terminal,
     ruleset: Ruleset,

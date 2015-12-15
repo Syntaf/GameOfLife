@@ -29,8 +29,11 @@ pub fn open(_ruleset: &mut Ruleset, term: &mut Terminal) {
 
     let mut ui_ = create_ui(t_width/2, t_height/2, &_ruleset);
     ui_.pack(term, HorizontalAlign::Middle, VerticalAlign::Middle, (0,0));
-   
+
+    // Rules with a value of -1 will not be updated when Ruleset::update() is
+    // called, thus start all rules empty
     let mut new_rules: Vec<i32> = vec![-1,-1,-1,-1,-1];
+    // Errors are displayed through error_lbl with the text as errors
     let mut error_lbl = Label::new(23,1);
     error_lbl.pack(&ui_, HorizontalAlign::Left, VerticalAlign::Bottom, (1,1));
     'main: loop {
@@ -41,12 +44,16 @@ pub fn open(_ruleset: &mut Ruleset, term: &mut Terminal) {
                 Some(ButtonResult::Custom(i))   => {
                     if let Some(res) = input::integer_prompt(term) {
                         if i < 5 {
+                            // options 1-5 are rules for cell death/creation, thus cannot exceed 
+                            // 8 (the number of neighbords)
                             if res <= 8 {
                                 new_rules[(i-1) as usize] = res as i32;
                             } else {
                                 errors = "Invalid value(0-8)".to_string();
                             }
                         } else {
+                            // options > 5 are rules for randomization, thus cannot exceed
+                            // 100% of the board
                             if res <= 100 {
                                 new_rules[(i-1) as usize] = res as i32;
                             } else {
@@ -55,7 +62,7 @@ pub fn open(_ruleset: &mut Ruleset, term: &mut Terminal) {
                         }
                     }
                 },
-                _                               => {}
+                _  => {}
             }
         }
 
