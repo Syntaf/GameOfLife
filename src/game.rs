@@ -66,7 +66,9 @@ impl Game {
         let mut dlg = Dialog::new(width, height);
         dlg.draw_box();
 
-        let mut title = Label::from_str("Stats will be displayed here");
+        let mut title = Label::new(width-width/8, 3); 
+        title.align_text(HorizontalAlign::Left, VerticalAlign::Top, (0,0));
+        title.set_text("Stats will be displayed here");
         title.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (2, 1));
         dlg.add_label(title);
 

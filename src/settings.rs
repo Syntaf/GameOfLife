@@ -89,24 +89,24 @@ fn create_ui(width: usize, height: usize,rules: &Ruleset) -> Dialog {
     title.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (2,1));
     dlg.add_label(title);
 
-    let mut category1 = Label::new(width/3, 3);
+    let mut category1 = Label::new(width-3, 3);
     category1.align_text(HorizontalAlign::Left, VerticalAlign::Top, (0,0));
     category1.set_text("Generational Rules: ".to_string() 
-                       + &(0..width/3-1).map(|_| "─").collect::<String>());
+                       + &(0..width-4).map(|_| "─").collect::<String>());
     category1.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (2, 3));
     dlg.add_label(category1);
 
-    let mut category2 = Label::new(width/3, 3);
+    let mut category2 = Label::new(width-3, 3);
     category2.align_text(HorizontalAlign::Left, VerticalAlign::Top, (0,0));
     category2.set_text("Randomize ".to_string()
-                       + &(0..width/3-1).map(|_| "─").collect::<String>());
+                       + &(0..width-4).map(|_| "─").collect::<String>());
     category2.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (2, CATEGORY1_S+5));
     dlg.add_label(category2);
 
-    let mut category3 = Label::new(width/3, 3);
+    let mut category3 = Label::new(width-3, 3);
     category3.align_text(HorizontalAlign::Left, VerticalAlign::Top, (0,0));
     category3.set_text("Game Speed ".to_string()
-                       + &(0..width/3-1).map(|_| "─").collect::<String>());
+                       + &(0..width-4).map(|_| "─").collect::<String>());
     category3.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (2, CATEGORY2_S+3));
     dlg.add_label(category3);
 
