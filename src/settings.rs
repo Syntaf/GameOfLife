@@ -100,14 +100,16 @@ fn create_ui(width: usize, height: usize,rules: &Ruleset) -> Dialog {
     category2.align_text(HorizontalAlign::Left, VerticalAlign::Top, (0,0));
     category2.set_text("Randomize ".to_string()
                        + &(0..width-4).map(|_| "─").collect::<String>());
-    category2.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (2, CATEGORY1_S+5));
+    category2.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, 
+                   (2, CATEGORY1_S+5));
     dlg.add_label(category2);
 
     let mut category3 = Label::new(width-3, 3);
     category3.align_text(HorizontalAlign::Left, VerticalAlign::Top, (0,0));
     category3.set_text("Game Speed ".to_string()
                        + &(0..width-4).map(|_| "─").collect::<String>());
-    category3.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (2, CATEGORY2_S+3));
+    category3.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, 
+                   (2, CATEGORY2_S+3));
     dlg.add_label(category3);
 
     draw_buttons(&mut dlg, rules);
@@ -120,24 +122,39 @@ fn draw_buttons(dlg: &mut Dialog, rules: &Ruleset) {
     starvation_b.pack(dlg, HorizontalAlign::Left, VerticalAlign::Top, (2,CATEGORY1_S));
     dlg.add_button(starvation_b);
 
-    let mut living_b = StdButton::new(&format!("{:<15} [{}]", "living", rules.living), 'l', ButtonResult::Custom(2));
-    living_b.pack(dlg, HorizontalAlign::Left, VerticalAlign::Top, (2,CATEGORY1_S+1));
+    let mut living_b = StdButton::new(
+        &format!("{:<15} [{}]", "living", rules.living), 
+        'l', ButtonResult::Custom(2));
+    living_b.pack(dlg, HorizontalAlign::Left, VerticalAlign::Top, 
+                  (2,CATEGORY1_S+1));
     dlg.add_button(living_b);
 
-    let mut smothered_b = StdButton::new(&format!("{:<15} [{}]", "Smothered", rules.smothered), 'm', ButtonResult::Custom(3));
-    smothered_b.pack(dlg, HorizontalAlign::Left, VerticalAlign::Top, (2,CATEGORY1_S+2));
+    let mut smothered_b = StdButton::new(
+        &format!("{:<15} [{}]", "Smothered", rules.smothered), 
+        'm', ButtonResult::Custom(3));
+    smothered_b.pack(dlg, HorizontalAlign::Left, VerticalAlign::Top, 
+                     (2,CATEGORY1_S+2));
     dlg.add_button(smothered_b);
 
-    let mut born_b = StdButton::new(&format!("{:<15} [{}]", "Born", rules.born), 'b', ButtonResult::Custom(4));
-    born_b.pack(dlg, HorizontalAlign::Left, VerticalAlign::Top, (2,CATEGORY1_S+3));
+    let mut born_b = StdButton::new(
+        &format!("{:<15} [{}]", "Born", rules.born), 
+        'b', ButtonResult::Custom(4));
+    born_b.pack(dlg, HorizontalAlign::Left, VerticalAlign::Top, 
+                (2,CATEGORY1_S+3));
     dlg.add_button(born_b);
 
-    let mut dist_b = StdButton::new(&format!("Percent Alive [{}%]", rules.distribution), 'p', ButtonResult::Custom(5));
-    dist_b.pack(dlg, HorizontalAlign::Left, VerticalAlign::Top, (2, CATEGORY2_S+1));
+    let mut dist_b = StdButton::new(
+        &format!("Percent Alive [{}%]", rules.distribution), 
+        'p', ButtonResult::Custom(5));
+    dist_b.pack(dlg, HorizontalAlign::Left, VerticalAlign::Top, 
+                (2, CATEGORY2_S+1));
     dlg.add_button(dist_b);
 
-    let mut speed_b = StdButton::new(&format!("Delay/Iteration [{}]", rules.speed), 'd', ButtonResult::Custom(6));
-    speed_b.pack(dlg, HorizontalAlign::Left, VerticalAlign::Top, (2, CATEGORY3_S));
+    let mut speed_b = StdButton::new(
+        &format!("Delay/Iteration [{}]", rules.speed), 
+        'd', ButtonResult::Custom(6));
+    speed_b.pack(dlg, HorizontalAlign::Left, VerticalAlign::Top, 
+                 (2, CATEGORY3_S));
     dlg.add_button(speed_b);
 
     let mut quit = StdButton::new("Quit", 'q', ButtonResult::Ok);
