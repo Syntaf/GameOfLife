@@ -75,7 +75,7 @@ dependencies = [
 [[package]]
 name = "rustty"
 version = "0.1.9"
-source = "git+https://github.com/Syntaf/rustty.git?branch=widget_redesign#fa383bb1431a0f1bf326b1b7167c337033fb2fe3"
+source = "git+https://github.com/Syntaf/rustty.git?branch=widget_redesign#b71e07d6bab06b3f42bbdcce063c2c3b966808fb"
 dependencies = [
  "gag 0.1.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "lazy_static 0.1.15 (registry+https://github.com/rust-lang/crates.io-index)",

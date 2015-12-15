@@ -12,6 +12,7 @@ pub mod game;
 pub mod grid;
 pub mod settings;
 pub mod help;
+pub mod input;
 
 use ruleset::Ruleset;
 use game::Game;
