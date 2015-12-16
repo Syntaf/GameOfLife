@@ -29,7 +29,7 @@ pub fn open(_ruleset: &mut Ruleset, term: &mut Terminal) {
     let (t_width, t_height) = term.size();
 
     let mut ui_ = create_ui(t_width/2, t_height - t_height/3 + 2, &_ruleset);
-    ui_.pack(term, HorizontalAlign::Middle, VerticalAlign::Middle, (0,0));
+    ui_.pack(term, HorizontalAlign::Middle, VerticalAlign::Top, (0,2));
 
     // Rules with a value of -1 will not be updated when Ruleset::update() is
     // called, thus start all rules empty

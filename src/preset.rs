@@ -28,7 +28,7 @@ pub fn open(grid: &mut Grid, term: &mut Terminal) {
     let (_, t_height) = term.size();
     let mut presets: Vec<String> = Vec::new();
     let mut ui = create_ui(50, t_height - t_height/3 + 2, &mut presets);
-    ui.pack(term, HorizontalAlign::Middle, VerticalAlign::Middle, (0,0));
+    ui.pack(term, HorizontalAlign::Middle, VerticalAlign::Top, (0,2));
 
     'main: loop {
         while let Some(Event::Key(ch)) = term.get_event(0).unwrap() {

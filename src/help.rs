@@ -42,7 +42,7 @@ pub fn open(_ruleset: &Ruleset, term: &mut Terminal) {
 
     let mut page1 = create_page0(t_width - t_width/3, 
                                  t_height - t_height/3 + 2);
-    page1.pack(term, HorizontalAlign::Middle, VerticalAlign::Middle, (0,0));
+    page1.pack(term, HorizontalAlign::Middle, VerticalAlign::Top, (0,2));
 
     let mut page2 = create_page1(t_width - t_width/3, 
                                  t_height - t_height/3 + 2);
