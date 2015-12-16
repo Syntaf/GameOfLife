@@ -73,6 +73,16 @@ impl Game {
         let mut play = false;
         // We don't want to wait 750 ms before the program starts, so 0 timeout
         let mut timeout = 0;
+        // Generation count
+        let mut gen: u64 = 0;
+
+        let mut gen_lbl = Label::new(self.stat_ui.frame().size().0-4, 1);
+        gen_lbl.pack(&self.stat_ui, HorizontalAlign::Left, VerticalAlign::Top, (2,3));
+        gen_lbl.set_text("Generation:");
+        
+        let mut aliv_lbl = Label::new(self.stat_ui.frame().size().0-4, 1);
+        aliv_lbl.pack(&self.stat_ui, HorizontalAlign::Left, VerticalAlign::Top, (2,4));
+        aliv_lbl.set_text("Living Cells:");
         'main: loop {
             while let Some(Event::Key(ch)) = self.term.get_event(timeout).unwrap() {
                 match self.ui.result_for_key(ch) {
@@ -82,15 +92,18 @@ impl Game {
                             1   => { play = true; },
                             2   => { /*  */ },
                             3   => { settings::open(&mut self.ruleset, 
-                                                    &mut self.term);    },
+                                                    &mut self.term);
+                                     gen = 0;                           },
                             4   => { help::open(&self.ruleset, 
                                                 &mut self.term);        },
                             5   => { about::open(&mut self.term);       },
                             6   => { editor::open(&mut self.grid,
-                                                  &mut self.term);      },
+                                                  &mut self.term);
+                                     gen = 0;                           },
                             7   => { self.randomize_grid();             },
                             8   => { preset::open(&mut self.grid,
-                                                  &mut self.term);      },
+                                                  &mut self.term);
+                                     gen = 0;                           },
                             _   => {}
                         }
                         if i != 1 { play = false; }
@@ -102,6 +115,7 @@ impl Game {
 
             // if the game is to be played
             if play {
+                let mut alive = 0;
                 let (cols, rows) = self.grid.playable_size();
                 let ref ruleset = self.ruleset;
 
@@ -111,6 +125,7 @@ impl Game {
                         let ncnt = self.grid.neighbors(x, y);
                         // conditions for only if the cell is alive
                         if self.grid.is_alive(x, y) {
+                            alive += 1;
                             if ncnt <= ruleset.starvation {
                                 self.grid.set_dead(x, y);
                             } else if ncnt == ruleset.living {
@@ -125,9 +140,14 @@ impl Game {
                 }
                 // The cell actions above are not recorded until an update is called
                 self.grid.update();
+                gen_lbl.set_text(format!("Generation: {:>7}", gen));
+                aliv_lbl.set_text(format!("Living Cells: {:>5}", alive));
+                gen += 1;
             }
 
             // Display the grid and ui to the screen
+            gen_lbl.draw(self.stat_ui.frame_mut());
+            aliv_lbl.draw(self.stat_ui.frame_mut());
             self.ui.draw(&mut self.term);
             self.stat_ui.draw(&mut self.term);
             self.grid.draw(&mut self.term);
@@ -175,7 +195,7 @@ impl Game {
 
         let mut title = Label::new(width-width/8, 3); 
         title.align_text(HorizontalAlign::Left, VerticalAlign::Top, (0,0));
-        title.set_text("Stats will be displayed here");
+        title.set_text("Stats");
         title.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (2, 1));
         dlg.add_label(title);
 
