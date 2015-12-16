@@ -89,10 +89,8 @@ impl Game {
                             6   => { editor::open(&mut self.grid,
                                                   &mut self.term);      },
                             7   => { self.randomize_grid();             },
-                            8   => { preset::load(&mut self.grid,
+                            8   => { preset::open(&mut self.grid,
                                                   &mut self.term);      },
-                            9   => { preset::save(&mut self.grid,
-                                                   &mut self.term);     },
                             _   => {}
                         }
                         if i != 1 { play = false; }
@@ -230,9 +228,6 @@ impl Game {
         preset.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Bottom, (2+2*COLUMN_SEP, 3));
         dlg.add_button(preset);
 
-        let mut save = StdButton::new("Save", 's', ButtonResult::Custom(9));
-        save.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Bottom, (2+2*COLUMN_SEP, 2));
-        dlg.add_button(save);
         dlg
     }
 }

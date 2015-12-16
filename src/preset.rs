@@ -1,9 +1,9 @@
-use std::char;
 use std::error::Error;
 use std::io::prelude::*;
 use std::fs;
 use std::fs::File;
 use std::path::Path;
+use std::io::BufReader;
 
 use grid::Grid;
 use rustty::{
@@ -21,19 +21,13 @@ use rustty::ui::core::{
 
 use rustty::ui::{
     Dialog,
-    Label,
     StdButton
 };
 
-struct Preset {
-    name: String,
-    path: String,
-}
-
-pub fn load(grid: &mut Grid, term: &mut Terminal) {
-    let (t_width, t_height) = term.size();
-    let mut presets: Vec<Preset> = Vec::new();
-    let mut ui = create_load_ui(50, t_height - t_height/3 + 2, &mut presets);
+pub fn open(grid: &mut Grid, term: &mut Terminal) {
+    let (_, t_height) = term.size();
+    let mut presets: Vec<String> = Vec::new();
+    let mut ui = create_ui(50, t_height - t_height/3 + 2, &mut presets);
     ui.pack(term, HorizontalAlign::Middle, VerticalAlign::Middle, (0,0));
 
     'main: loop {
@@ -53,26 +47,25 @@ pub fn load(grid: &mut Grid, term: &mut Terminal) {
     }
 }
 
-fn load_preset(p: &Preset, grid: &mut Grid) {
-    let mut file = match File::open(Path::new(&p.path)) {
-        Err(why) => panic!("Error loading preset {}: {}", &p.path,
+fn load_preset(p: &str, grid: &mut Grid) {
+    let file = match File::open(Path::new(&p)) {
+        Err(why) => panic!("Error loading preset {}: {}", &p,
                            Error::description(&why)),
-        Ok(file) => file,
+        Ok(f) => BufReader::new(f),
     };
 
-    let mut s = String::new();
-    match file.read_to_string(&mut s) {
-        Err(why) => panic!("Error reading {}: {}", &p.path,
-                           Error::description(&why)),
-        Ok(_) => panic!("{}", s)
+    for line in file.lines() {
+        let l = line.unwrap();
+        let cords = l.split(",").map(
+            |x| usize::from_str_radix(x, 10).unwrap())
+            .collect::<Vec<usize>>();
+        grid.canvas_mut().get_mut(cords[0], cords[1]).unwrap().
+            set_bg(Grid::rand_color());
     }
+
 }
 
-pub fn save(grid: &mut Grid, term: &mut Terminal) {
-    let mut ui = create_save_ui(40, 10);
-}
-
-fn create_load_ui(width: usize, height: usize, presets: &mut Vec<Preset>) 
+fn create_ui(width: usize, height: usize, presets: &mut Vec<String>) 
     -> Dialog {
 
     let mut dlg = Dialog::new(width, height);
@@ -95,21 +88,12 @@ fn create_load_ui(width: usize, height: usize, presets: &mut Vec<Preset>)
             btn.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top,
                      (2,i as usize));
             dlg.add_button(btn);
-            presets.push( Preset {
-                name: name.to_string(),
-                path: path.to_str().unwrap().to_string()});
+            presets.push(path.to_str().unwrap().to_string());
             i += 1;
         }
     }
     let mut quit = StdButton::new("Quit", 'q', ButtonResult::Ok);
     quit.pack(&dlg, HorizontalAlign::Right, VerticalAlign::Bottom, (1,1));
     dlg.add_button(quit);
-    dlg
-}
-
-fn create_save_ui(width: usize, height: usize) -> Dialog {
-    let mut dlg = Dialog::new(width, height);
-    dlg.draw_box();
-
     dlg
 }
