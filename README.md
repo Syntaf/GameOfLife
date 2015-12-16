@@ -3,6 +3,6 @@ A terminal based Conways Game of Life. This repository uses standard terminal co
 
  Randomize | Preset
 :-----------:|:--------------:
-![gif](http://i.imgur.com/EVTiWKN.gifv) | ![gif](http://i.imgur.com/Wyhf1x7.gifv)
+![gif](http://i.imgur.com/EVTiWKN.gif) | ![gif](http://i.imgur.com/Wyhf1x7.gif)
 
 Supports: Linux
