@@ -30,6 +30,13 @@ const SETTINGS_DESC: &'static str = "All 4 rules of 'Life' can be modified \
     accepts a percentage value 0-100 (percentage cells that will start alive) \
     and speed accepts up to a u16 (ms of delay per generation).";
 
+const CREATION_DESC: &'static str = "There are a couple ways to create a \
+    starting configuration. The first is to randomize the selection by \
+    pressing 'r', this will distribute a percentage of cells as alive \
+    randomly across the board. Next you can hop into the editor mode with \
+    'e' and create a custom configuration using your paintbrush. Lastly you \
+    can load custom presets provided by pressing 't'";
+
 pub fn open(_ruleset: &Ruleset, term: &mut Terminal) {
     let (t_width, t_height) = term.size();
 
@@ -125,6 +132,13 @@ fn create_page1(width: usize, height:usize) -> Dialog {
     desc.set_text(SETTINGS_DESC);
     desc.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (4,3));
     dlg.add_label(desc);
+
+    let mut desc2 = Label::new(width-6, height/4);
+    desc2.align_text(HorizontalAlign::Left, VerticalAlign::Top, (0,0));
+    desc2.set_text(CREATION_DESC);
+    desc2.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, 
+               (4,5+height/4));
+    dlg.add_label(desc2);
 
     let mut prev_page = StdButton::new("Previous Page - Game of Life", 'p',
                                        ButtonResult::Custom(0));
