@@ -5,4 +5,6 @@ A terminal based Conways Game of Life. This repository uses standard terminal co
 :-----------:|:--------------:
 ![gif](http://i.imgur.com/EVTiWKN.gif) | ![gif](http://i.imgur.com/Wyhf1x7.gif)
 
+See Help (*'h'*) within the program for more information on how to use GameOfLife
+
 Supports: Linux
