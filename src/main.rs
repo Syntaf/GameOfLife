@@ -14,6 +14,7 @@ pub mod settings;
 pub mod help;
 pub mod input;
 pub mod about;
+pub mod editor;
 
 use ruleset::Ruleset;
 use game::Game;

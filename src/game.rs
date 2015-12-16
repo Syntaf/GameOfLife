@@ -26,6 +26,7 @@ use rustty::ui::{
 use settings;
 use help;
 use about;
+use editor;
 
 // Hold all UI elements and perform game logic within a 
 // main loop
@@ -78,19 +79,18 @@ impl Game {
                     Some(ButtonResult::Custom(i)) => {
                         match i {
                             1   => { play = true; },
-                            2   => { play = false; },
+                            2   => { /*  */ },
                             3   => { settings::open(&mut self.ruleset, 
-                                                    &mut self.term);
-                                     play = false; },
-                            4   => { help::open(&self.ruleset, &mut self.term);
-                                     play = false; },
-                            5   => { about::open(&mut self.term);
-                                     play = false; },
-                            6   => { /* */ },
-                            7   => { self.randomize_grid();
-                                     play = false; },
+                                                    &mut self.term);    },
+                            4   => { help::open(&self.ruleset, 
+                                                &mut self.term);        },
+                            5   => { about::open(&mut self.term);       },
+                            6   => { editor::open(&mut self.grid,
+                                                  &mut self.term);      },
+                            7   => { self.randomize_grid();             },
                             _   => {}
                         }
+                        if i != 1 { play = false; }
                     }
                      _  => {},
                 }

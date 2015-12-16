@@ -105,7 +105,7 @@ impl Grid {
         }
     }
 
-    fn rand_color() -> Color {
+    pub fn rand_color() -> Color {
         let color = Range::new(0, 6);
         let mut rng = rand::thread_rng();
 
@@ -176,6 +176,10 @@ impl Grid {
                                          .set_bg(Color::Default); }
             }
         }
+    }
+
+    pub fn canvas_mut(&mut self) -> &mut Canvas {
+        &mut self.canvas
     }
 }
 
