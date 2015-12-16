@@ -21,11 +21,13 @@ use rustty::ui::{
     StdButton
 };
 
+// Helper struct for keeping track of cursor
 struct Cursor {
     pos: Position,
     color: Color,
 }
 
+// Cursor contains an x,y
 #[derive(Copy, Clone)]
 struct Position {
     x: usize,
@@ -49,11 +51,13 @@ pub fn open(grid: &mut Grid, term: &mut Terminal) {
             let canvas = grid.canvas_mut();
             match ch {
                 'q' => { 
+                    // Restore previous color before cursor then quit
                     canvas.get_mut(cursor.pos.x, cursor.pos.y).unwrap().
                         set_bg(cursor.color);
                     break 'main; 
                 },
                 'w' => { 
+                    // Restore previous color of cell before moving cursor forward
                     canvas.get_mut(cursor.pos.x, cursor.pos.y).unwrap().
                         set_bg(cursor.color);
                     cursor.pos.y = cursor.pos.y.saturating_sub(1);
@@ -102,6 +106,7 @@ pub fn open(grid: &mut Grid, term: &mut Terminal) {
                 _ => {}
             }
         }
+        // Check bounds
         if cursor.pos.x > cols {
             cursor.pos.x -= 1;
         } else if cursor.pos.x < 1 {
@@ -112,6 +117,8 @@ pub fn open(grid: &mut Grid, term: &mut Terminal) {
         } else if cursor.pos.y < 1 { 
             cursor.pos.y += 1;
         }
+
+        // Paint the location of the cursor red
         grid.canvas_mut().get_mut(cursor.pos.x, cursor.pos.y).unwrap().set_bg(
             Color::Red);
 
