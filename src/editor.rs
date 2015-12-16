@@ -146,7 +146,7 @@ fn create_ui(width: usize, height: usize) -> Dialog {
 
     let mut clear = Label::from_str(
         format!("{:<10} {}","c", "-> Clear screen"));
-    clear.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (50,3));
+    clear.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (2,6));
     dlg.add_label(clear);
 
     let mut quit = StdButton::new("Quit", 'q', ButtonResult::Ok);
