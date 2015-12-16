@@ -1,10 +1,13 @@
 use ruleset::Ruleset;
 use grid::Grid;
 
+use rand::distributions::{IndependentSample, Range};
+use rand;
+
 use rustty::{
     Terminal,
     Event,
-    HasSize
+    HasSize,
 };
 
 use rustty::ui::core::{
@@ -61,6 +64,106 @@ impl Game {
             stat_ui: stat_ui_,
             grid: grid_ 
         }
+    }
+
+
+    pub fn run(&mut self) {
+        let mut play = false;
+        // We don't want to wait 750 ms before the program starts, so 0 timeout
+        let mut timeout = 0;
+        'main: loop {
+            while let Some(Event::Key(ch)) = self.term.get_event(timeout).unwrap() {
+                match self.ui.result_for_key(ch) {
+                    Some(ButtonResult::Ok) => break 'main,
+                    Some(ButtonResult::Custom(i)) => {
+                        match i {
+                            1   => { play = true; },
+                            2   => { play = false; },
+                            3   => { settings::open(&mut self.ruleset, 
+                                                    &mut self.term);
+                                     play = false; },
+                            4   => { help::open(&self.ruleset, &mut self.term);
+                                     play = false; },
+                            5   => { about::open(&mut self.term);
+                                     play = false; },
+                            6   => { /* */ },
+                            7   => { self.randomize_grid();
+                                     play = false; },
+                            _   => {}
+                        }
+                    }
+                     _  => {},
+                }
+            }
+            timeout = self.ruleset.speed as isize;
+
+            // if the game is to be played
+            if play {
+                let (cols, rows) = self.grid.playable_size();
+                let ref ruleset = self.ruleset;
+
+                // Iterate over the playable region
+                for y in 1..rows {
+                    for x in 1..cols {
+                        let ncnt = self.grid.neighbors(x, y);
+                        // conditions for only if the cell is alive
+                        if self.grid.is_alive(x, y) {
+                            if ncnt <= ruleset.starvation {
+                                self.grid.set_dead(x, y);
+                            } else if ncnt == ruleset.living {
+                                /* nothing */
+                            } else if ncnt >= ruleset.smothered {
+                                self.grid.set_dead(x, y);
+                            }
+                        } else  if ncnt >= ruleset.born && ncnt < ruleset.smothered {
+                            self.grid.set_alive(x, y);
+                        }
+                    }
+                }
+                // The cell actions above are not recorded until an update is called
+                self.grid.update();
+            }
+
+            // Display the grid and ui to the screen
+            self.ui.draw(&mut self.term);
+            self.stat_ui.draw(&mut self.term);
+            self.grid.draw(&mut self.term);
+            self.term.swap_buffers().unwrap();
+        }
+    }
+
+    pub fn randomize_grid(&mut self) {
+        let (cols, rows) = self.grid.playable_size();
+
+        // Start by clearing screen
+        for y in 1..rows {
+            for x in 1..cols {
+                    self.grid.set_dead(x, y);
+            }
+        }
+
+        // Update grid with blank sheet
+        self.grid.update();
+
+        // Designate amount of cells that are alive
+        let total_cells = cols * rows;
+        let alive_cells = total_cells as f32  * 
+            (self.ruleset.distribution as f32 / 100.0);
+
+        let col_rnder = Range::new(2,cols);
+        let row_rnder = Range::new(2,rows);
+        let mut rng = rand::thread_rng();
+
+        // Worse case O(n^2) , if distribution is 100%. Possibly
+        // find a better algorithm?
+        for _i in 0..(alive_cells as usize) {
+            self.grid.set_alive(
+                col_rnder.ind_sample(&mut rng),
+                row_rnder.ind_sample(&mut rng))
+        }
+
+        self.grid.update();
+    
     }
 
     fn create_stats(width: usize, height: usize) -> Dialog {
@@ -123,68 +226,6 @@ impl Game {
         dlg.add_button(preset);
 
         dlg
-    }
-
-    pub fn run(&mut self) {
-        let mut play = false;
-        // We don't want to wait 750 ms before the program starts, so 0 timeout
-        let mut timeout = 0;
-        'main: loop {
-            while let Some(Event::Key(ch)) = self.term.get_event(timeout).unwrap() {
-                match self.ui.result_for_key(ch) {
-                    Some(ButtonResult::Ok) => break 'main,
-                    Some(ButtonResult::Custom(i)) => {
-                        match i {
-                            1   => { play = true; },
-                            2   => { play = false; },
-                            3   => { settings::open(&mut self.ruleset, 
-                                                    &mut self.term);
-                                     play = false; },
-                            4   => { help::open(&self.ruleset, &mut self.term);
-                                     play = false; },
-                            5   => { about::open(&mut self.term);
-                                     play = false; },
-                            _   => {}
-                        }
-                    }
-                     _  => {},
-                }
-            }
-            timeout = self.ruleset.speed as isize;
-
-            // if the game is to be played
-            if play {
-                let (cols, rows) = self.grid.playable_size();
-                let ref ruleset = self.ruleset;
-
-                // Iterate over the playable region
-                for y in 1..rows {
-                    for x in 1..cols {
-                        let ncnt = self.grid.neighbors(x, y);
-                        // conditions for only if the cell is alive
-                        if self.grid.is_alive(x, y) {
-                            if ncnt <= ruleset.starvation {
-                                self.grid.set_dead(x, y);
-                            } else if ncnt == ruleset.living {
-                                /* nothing */
-                            } else if ncnt >= ruleset.smothered {
-                                self.grid.set_dead(x, y);
-                            }
-                        } else  if ncnt >= ruleset.born && ncnt < ruleset.smothered {
-                            self.grid.set_alive(x, y);
-                        }
-                    }
-                }
-                // The cell actions above are not recorded until an update is called
-                self.grid.update();
-            }
-
-            // Display the grid and ui to the screen
-            self.ui.draw(&mut self.term);
-            self.stat_ui.draw(&mut self.term);
-            self.grid.draw(&mut self.term);
-            self.term.swap_buffers().unwrap();
-        }
     }
 }
 
