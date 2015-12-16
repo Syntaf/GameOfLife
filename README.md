@@ -5,6 +5,15 @@ A terminal based Conways Game of Life. This repository uses standard terminal co
 :-----------:|:--------------:
 ![gif](http://i.imgur.com/EVTiWKN.gif) | ![gif](http://i.imgur.com/Wyhf1x7.gif)
 
+##### Building & Running
+--------------------
+
+1. Ensure you have [Rust](https://www.rust-lang.org/downloads.html) installed and cargo is within your path
+2. `` git clone http://Github.com/Syntaf/GameOfLife ``
+3. `` cd GameOfLife && cargo run ``
+ 
+And enjoy!
+
 See Help (*'h'*) within the program for more information on how to use GameOfLife
 
 Supports: Linux
