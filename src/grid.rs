@@ -55,18 +55,21 @@ impl Grid {
     }
 
     pub fn rand_color() -> Color {
-        let color = Range::new(0, 6);
+        let color = Range::new(1, 7);
         let mut rng = rand::thread_rng();
 
         // Generate random color not including the background 
         // color of the console
         let value = color.ind_sample(&mut rng);
+        Color::Byte(value)
+        /*
         Color::Byte(
             if value >= 3 {
                 value + 1
             } else {
                 value
             })
+        */
     }
 
     pub fn neighbors(&self, x: usize, y: usize) -> u8{

@@ -53,36 +53,36 @@ pub fn open(grid: &mut Grid, term: &mut Terminal) {
                 'q' => { 
                     // Restore previous color before cursor then quit
                     canvas.get_mut(cursor.pos.x, cursor.pos.y).unwrap().
-                        set_bg(cursor.color);
+                        set_ch(' ');
                     break 'main; 
                 },
                 'w' => { 
                     // Restore previous color of cell before moving cursor forward
                     canvas.get_mut(cursor.pos.x, cursor.pos.y).unwrap().
-                        set_bg(cursor.color);
+                        set_ch(' ');
                     cursor.pos.y = cursor.pos.y.saturating_sub(1);
-                    cursor.color = canvas.get_mut(cursor.pos.x, cursor.pos.y).
+                    cursor.color = canvas.get(cursor.pos.x, cursor.pos.y).
                         unwrap().bg();
                 },
                 's' => {
                     canvas.get_mut(cursor.pos.x, cursor.pos.y).unwrap().
-                        set_bg(cursor.color);
+                        set_ch(' ');
                     cursor.pos.y += 1;
-                    cursor.color = canvas.get_mut(cursor.pos.x, cursor.pos.y).
+                    cursor.color = canvas.get(cursor.pos.x, cursor.pos.y).
                         unwrap().bg();
                 },
                 'a' => {
                     canvas.get_mut(cursor.pos.x, cursor.pos.y).unwrap().
-                        set_bg(cursor.color);
+                        set_ch(' ');
                     cursor.pos.x = cursor.pos.x.saturating_sub(1);
-                    cursor.color = canvas.get_mut(cursor.pos.x, cursor.pos.y).
+                    cursor.color = canvas.get(cursor.pos.x, cursor.pos.y).
                         unwrap().bg();
                 },
                 'd' => {
                     canvas.get_mut(cursor.pos.x, cursor.pos.y).unwrap().
-                        set_bg(cursor.color);
+                        set_ch(' ');
                     cursor.pos.x += 1;
-                    cursor.color = canvas.get_mut(cursor.pos.x, cursor.pos.y).
+                    cursor.color = canvas.get(cursor.pos.x, cursor.pos.y).
                         unwrap().bg();
                 },
                 '\x7f' => {
@@ -119,8 +119,8 @@ pub fn open(grid: &mut Grid, term: &mut Terminal) {
         }
 
         // Paint the location of the cursor red
-        grid.canvas_mut().get_mut(cursor.pos.x, cursor.pos.y).unwrap().set_bg(
-            Color::Red);
+        grid.canvas_mut().get_mut(cursor.pos.x, cursor.pos.y).unwrap().set_ch(
+            '\u{25A1}');
 
         grid.draw(term);
         ui.draw(term);
