@@ -22,9 +22,8 @@ pub fn open(term: &mut Terminal) {
 
     'main: loop {
         while let Some(Event::Key(ch)) = term.get_event(0).unwrap() {
-            match ui.result_for_key(ch) {
-                Some(ButtonResult::Ok) => break 'main,
-                _                      => {}
+            if let Some(ButtonResult::Ok) = ui.result_for_key(ch) { 
+                break 'main
             }
         }
 

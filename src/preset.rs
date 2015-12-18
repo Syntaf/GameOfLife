@@ -88,7 +88,7 @@ fn create_ui(width: usize, height: usize, presets: &mut Vec<String>)
             btn.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top,
                      (2,i as usize));
             dlg.add_button(btn);
-            presets.push(path.to_str().unwrap().to_string());
+            presets.push(path.to_str().unwrap().to_owned());
             i += 1;
         }
     }

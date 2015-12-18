@@ -1,4 +1,4 @@
-use ruleset::Ruleset;
+    use ruleset::Ruleset;
 
 use rustty::{
     Terminal, 
@@ -50,7 +50,7 @@ pub fn open(_ruleset: &mut Ruleset, term: &mut Terminal) {
                             if res <= 8 {
                                 new_rules[(i-1) as usize] = res as i32;
                             } else {
-                                errors = "Invalid value(0-8)".to_string();
+                                errors = "Invalid value(0-8)".to_owned();
                             }
                         } else if i == 5 {
                             // options > 5 are rules for randomization, thus cannot exceed
@@ -58,7 +58,7 @@ pub fn open(_ruleset: &mut Ruleset, term: &mut Terminal) {
                             if res <= 100 {
                                 new_rules[(i-1) as usize] = res as i32;
                             } else {
-                                errors = "Invalid value(0-100)".to_string();
+                                errors = "Invalid value(0-100)".to_owned();
                             }
                         } else {
                             new_rules[(i-1) as usize] = res as i32;
@@ -91,14 +91,14 @@ fn create_ui(width: usize, height: usize,rules: &Ruleset) -> Dialog {
 
     let mut category1 = Label::new(width-3, 3);
     category1.align_text(HorizontalAlign::Left, VerticalAlign::Top, (0,0));
-    category1.set_text("Generational Rules: ".to_string() 
+    category1.set_text("Generational Rules: ".to_owned() 
                        + &(0..width-4).map(|_| "─").collect::<String>());
     category1.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (2, 3));
     dlg.add_label(category1);
 
     let mut category2 = Label::new(width-3, 3);
     category2.align_text(HorizontalAlign::Left, VerticalAlign::Top, (0,0));
-    category2.set_text("Randomize ".to_string()
+    category2.set_text("Randomize ".to_owned()
                        + &(0..width-4).map(|_| "─").collect::<String>());
     category2.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, 
                    (2, CATEGORY1_S+5));
@@ -106,7 +106,7 @@ fn create_ui(width: usize, height: usize,rules: &Ruleset) -> Dialog {
 
     let mut category3 = Label::new(width-3, 3);
     category3.align_text(HorizontalAlign::Left, VerticalAlign::Top, (0,0));
-    category3.set_text("Game Speed ".to_string()
+    category3.set_text("Game Speed ".to_owned()
                        + &(0..width-4).map(|_| "─").collect::<String>());
     category3.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, 
                    (2, CATEGORY2_S+3));

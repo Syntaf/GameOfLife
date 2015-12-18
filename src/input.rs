@@ -25,7 +25,7 @@ pub fn integer_prompt(term: &mut Terminal) -> Option<u32> {
     // TO-DO: Fix this abomination, this code segment is HORRIBLE due to a bug
     // discovered in the rustty fork. I honestly have no idea how to fix the bug 
     // too, RIP. That's why you see the '_' placed before and after, it's a workaround
-    let mut value = "_".to_string();
+    let mut value = "_".to_owned();
     let mut input = Label::new(15,1);
     input.pack(&prompt, HorizontalAlign::Middle, VerticalAlign::Middle, (0,0));
     'main: loop {
