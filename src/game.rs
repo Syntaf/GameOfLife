@@ -117,7 +117,7 @@ impl Game {
             if play {
                 let mut alive = 0;
                 let (cols, rows) = self.grid.playable_size();
-                let ref ruleset = self.ruleset;
+                let ruleset = &self.ruleset;
 
                 // Iterate over the playable region
                 for y in 1..rows {

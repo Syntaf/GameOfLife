@@ -19,7 +19,7 @@ impl Ruleset {
                   speed: rules.5, }
     }
 
-    pub fn update(&mut self, nrules: &Vec<i32>) {
+    pub fn update(&mut self, nrules: &[i32]) {
         if nrules[0] != -1 { self.starvation = nrules[0] as u8 }
         else if nrules[1] != -1 { self.living = nrules[1] as u8}
         else if nrules[2] != -1 { self.smothered = nrules[2] as u8 }
