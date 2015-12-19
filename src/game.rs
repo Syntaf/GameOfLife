@@ -29,7 +29,7 @@ use about;
 use preset;
 use editor;
 
-// Hold all UI elements and perform game logic within a 
+// Hold all UI elements and perform game logic within a
 // main loop
 pub struct Game {
     term: Terminal,
@@ -46,7 +46,7 @@ impl Game {
         if t_width < 80 || t_height < 40 {
             panic!(format!("Terminal size too small({}x{}), must be at least \
                             {}x{} (columns x rows)",
-                t_width, t_height, 80, 34));
+                t_width, t_height, 80, 40));
         }
 
         let mut ui_ = Game::create_ui(2 * t_width/3, t_height/5);
@@ -59,12 +59,12 @@ impl Game {
         grid_.draw_box();
         grid_.pack(&t_term, HorizontalAlign::Middle, VerticalAlign::Top, (0,0));
 
-        Game { 
-            term: t_term, 
-            ruleset: t_ruleset, 
-            ui: ui_, 
+        Game {
+            term: t_term,
+            ruleset: t_ruleset,
+            ui: ui_,
             stat_ui: stat_ui_,
-            grid: grid_ 
+            grid: grid_
         }
     }
 
@@ -79,7 +79,7 @@ impl Game {
         let mut gen_lbl = Label::new(self.stat_ui.frame().size().0-4, 1);
         gen_lbl.pack(&self.stat_ui, HorizontalAlign::Left, VerticalAlign::Top, (2,3));
         gen_lbl.set_text("Generation:");
-        
+
         let mut aliv_lbl = Label::new(self.stat_ui.frame().size().0-4, 1);
         aliv_lbl.pack(&self.stat_ui, HorizontalAlign::Left, VerticalAlign::Top, (2,4));
         aliv_lbl.set_text("Living Cells:");
@@ -91,10 +91,10 @@ impl Game {
                         match i {
                             1   => { play = true; },
                             2   => { /*  */ },
-                            3   => { settings::open(&mut self.ruleset, 
+                            3   => { settings::open(&mut self.ruleset,
                                                     &mut self.term);
                                      gen = 0;                           },
-                            4   => { help::open(&self.ruleset, 
+                            4   => { help::open(&self.ruleset,
                                                 &mut self.term);        },
                             5   => { about::open(&mut self.term);       },
                             6   => { editor::open(&mut self.grid,
@@ -170,7 +170,7 @@ impl Game {
 
         // Designate amount of cells that are alive
         let total_cells = cols * rows;
-        let alive_cells = total_cells as f32  * 
+        let alive_cells = total_cells as f32  *
             (self.ruleset.distribution as f32 / 100.0);
 
         let col_rnder = Range::new(2,cols);
@@ -186,14 +186,14 @@ impl Game {
         }
 
         self.grid.update();
-    
+
     }
 
     fn create_stats(width: usize, height: usize) -> Dialog {
         let mut dlg = Dialog::new(width, height);
         dlg.draw_box();
 
-        let mut title = Label::new(width-width/8, 3); 
+        let mut title = Label::new(width-width/8, 3);
         title.align_text(HorizontalAlign::Left, VerticalAlign::Top, (0,0));
         title.set_text("Stats");
         title.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (2, 1));
@@ -211,7 +211,7 @@ impl Game {
         let mut title = Label::from_str("Welcome to the console based game of life!");
         title.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Top, (2,1));
         dlg.add_label(title);
-        
+
         let mut play = StdButton::new("Play", 'p', ButtonResult::Custom(1));
         play.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Bottom, (2,5));
         dlg.add_button(play);
@@ -219,7 +219,7 @@ impl Game {
         let mut stop = StdButton::new("Stop", 'o', ButtonResult::Custom(2));
         stop.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Bottom, (2,4));
         dlg.add_button(stop);
-        
+
         let mut settings = StdButton::new("Settings", 's', ButtonResult::Custom(3));
         settings.pack(&dlg, HorizontalAlign::Left, VerticalAlign::Bottom, (2,3));
         dlg.add_button(settings);
@@ -251,4 +251,3 @@ impl Game {
         dlg
     }
 }
-
