@@ -5,4 +5,4 @@ authors = ["Syntaf <gmercer015@gmail.com>"]
 
 [dependencies]
 rand = "*"
-rustty = { git = "https://github.com/Syntaf/rustty.git", branch = "widget_redesign" }
+rustty = { git = "https://github.com/Syntaf/ruik.git", branch = "widget_redesign" }
