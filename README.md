@@ -1,6 +1,8 @@
 # GameOfLife
 A terminal based Conways Game of Life. This repository uses standard terminal colors to simulate Conways Game of Life within your own terminal!
 
+gui and graphics powered by [fe-rustty](https://github.com/Syntaf/fe-rustty) 
+
  Randomize | Preset
 :-----------:|:--------------:
 ![gif](http://i.imgur.com/EVTiWKN.gif) | ![gif](http://i.imgur.com/Wyhf1x7.gif)
